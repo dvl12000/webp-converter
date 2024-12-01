@@ -2,9 +2,11 @@ name: Build macOS App
 
 on:
   push:
-    branches: [ "hotfix/video-conversion-fix" ]
-  pull_request:
-    branches: [ "main" ]
+    branches: [ "hotfix/video-conversion-fix", "main" ]
+    paths-ignore:
+      - '**.md'
+      - '.gitignore'
+      - 'LICENSE'
   workflow_dispatch:
 
 jobs:
