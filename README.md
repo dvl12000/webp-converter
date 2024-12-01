@@ -6,6 +6,15 @@ A modern, cross-platform application for converting WebP files to various format
 ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS-lightgrey)
 ![Python version](https://img.shields.io/badge/python-3.10-blue)
 
+## 📸 Screenshots
+![Main Window](https://raw.githubusercontent.com/dvl12000/webp-converter/main/screenshots/main-window.png)
+
+*Main application window with dark theme*
+
+![Files Added](https://raw.githubusercontent.com/dvl12000/webp-converter/main/screenshots/files-added.png)
+
+*File selection and queue management*
+
 ## Features
 
 - **Specialized WebP Conversion**: Convert both static and animated WebP files
