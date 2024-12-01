@@ -429,39 +429,44 @@ class FormatConverter(ctk.CTk):
                                 frames.append(np.array(img.convert('RGB')))
                             
                             clip = ImageSequenceClip(frames, fps=fps)
-                            
-                            # Для Mac используем специальные кодеки
-                            if self.is_mac:
-                                if format_name == "ProRes 422":
-                                    clip.write_videofile(output_path, codec='prores_ks', preset='normal', ffmpeg_params=['-profile:v', '2'])
-                                elif format_name == "ProRes 4444":
-                                    clip.write_videofile(output_path, codec='prores_ks', preset='normal', ffmpeg_params=['-profile:v', '4'])
+                            try:
+                                # Для Mac используем специальные кодеки
+                                if self.is_mac:
+                                    if format_name == "ProRes 422":
+                                        clip.write_videofile(output_path, codec='prores_ks', preset='normal', ffmpeg_params=['-profile:v', '2'])
+                                    elif format_name == "ProRes 4444":
+                                        clip.write_videofile(output_path, codec='prores_ks', preset='normal', ffmpeg_params=['-profile:v', '4'])
+                                    else:
+                                        clip.write_videofile(output_path, codec='libx264', preset='medium')
                                 else:
-                                    clip.write_videofile(output_path, codec='libx264', preset='medium')
-                            else:
-                                if format_name == "ProRes 422":
-                                    clip.write_videofile(output_path, codec='prores', preset='normal')
-                                elif format_name == "ProRes 4444":
-                                    clip.write_videofile(output_path, codec='prores_ks', preset='normal')
-                                else:
-                                    clip.write_videofile(output_path)
+                                    if format_name == "ProRes 422":
+                                        clip.write_videofile(output_path, codec='prores', preset='normal')
+                                    elif format_name == "ProRes 4444":
+                                        clip.write_videofile(output_path, codec='prores_ks', preset='normal')
+                                    else:
+                                        clip.write_videofile(output_path)
+                            finally:
+                                clip.close()
                         else:
                             # Статичное изображение
                             clip = ImageClip(np.array(img)).set_duration(5)
-                            if self.is_mac:
-                                if format_name == "ProRes 422":
-                                    clip.write_videofile(output_path, codec='prores_ks', preset='normal', ffmpeg_params=['-profile:v', '2'])
-                                elif format_name == "ProRes 4444":
-                                    clip.write_videofile(output_path, codec='prores_ks', preset='normal', ffmpeg_params=['-profile:v', '4'])
+                            try:
+                                if self.is_mac:
+                                    if format_name == "ProRes 422":
+                                        clip.write_videofile(output_path, codec='prores_ks', preset='normal', ffmpeg_params=['-profile:v', '2'])
+                                    elif format_name == "ProRes 4444":
+                                        clip.write_videofile(output_path, codec='prores_ks', preset='normal', ffmpeg_params=['-profile:v', '4'])
+                                    else:
+                                        clip.write_videofile(output_path, codec='libx264', preset='medium')
                                 else:
-                                    clip.write_videofile(output_path, codec='libx264', preset='medium')
-                            else:
-                                if format_name == "ProRes 422":
-                                    clip.write_videofile(output_path, codec='prores', preset='normal')
-                                elif format_name == "ProRes 4444":
-                                    clip.write_videofile(output_path, codec='prores_ks', preset='normal')
-                                else:
-                                    clip.write_videofile(output_path)
+                                    if format_name == "ProRes 422":
+                                        clip.write_videofile(output_path, codec='prores', preset='normal')
+                                    elif format_name == "ProRes 4444":
+                                        clip.write_videofile(output_path, codec='prores_ks', preset='normal')
+                                    else:
+                                        clip.write_videofile(output_path)
+                            finally:
+                                clip.close()
                 elif format_ext == '.gif':
                     # Конвертация в GIF
                     self.convert_to_gif(input_path, output_path, fps)

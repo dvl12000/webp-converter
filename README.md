@@ -1,35 +1,29 @@
 # WebP Converter
 
-Простой и удобный конвертер для преобразования WebP файлов в различные форматы.
+A modern, cross-platform application for converting WebP files to various formats with a clean and intuitive interface.
 
-## Возможности
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/dvl12000/webp-converter)
+![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS-lightgrey)
+![Python version](https://img.shields.io/badge/python-3.10-blue)
 
-- Конвертация WebP в популярные форматы (MP4, GIF, WebM и др.)
-- Поддержка пакетной конвертации (несколько файлов одновременно)
-- Настройка частоты кадров для видео
-- Современный темный интерфейс
-- Отслеживание прогресса конвертации
-- Возможность отмены процесса
+## Features
 
-## Поддерживаемые форматы
+- **Specialized WebP Conversion**: Convert both static and animated WebP files
+- **Multiple Output Formats**:
+  - MP4 (H.264)
+  - ProRes 422
+  - ProRes 4444
+  - GIF
+  - WebM
+  - AVI
+- **Batch Processing**: Convert multiple files at once
+- **Modern Interface**: Clean and intuitive design using CustomTkinter
+- **Configurable Settings**: Adjust FPS (1-120) for animated conversions
+- **Cross-Platform**: Runs natively on Windows and macOS
+- **Progress Tracking**: Real-time conversion progress display
+- **Cancellable Operations**: Stop conversions at any time
 
-Входные форматы:
-- WebP
-- GIF
-- MP4
-- MOV
-- AVI
-- WebM
-
-Выходные форматы:
-- MP4 (H.264)
-- ProRes 422
-- ProRes 4444
-- GIF
-- WebM
-- AVI
-
-## Установка
+## Installation
 
 ### Вариант 1: Запуск из исходного кода
 
@@ -49,30 +43,48 @@ python webp_to_mp4_converter.py
 1. Скачайте последнюю версию WebP Converter.exe
 2. Запустите программу двойным кликом
 
-## Создание exe-файла
+## Usage
 
-Если вы хотите собрать exe-файл самостоятельно:
+1. Launch WebP Converter
+2. Click "Add Files" or drag and drop WebP files into the application
+3. Select your desired output format
+4. Adjust FPS if needed (for animated WebP files)
+5. Click "Convert" to start the conversion process
 
-1. Установите зависимости:
-```bash
-pip install -r requirements.txt
-```
+## Development
 
-2. Запустите скрипт сборки:
+### Requirements
+- Python 3.10+
+- Required packages (install via pip):
+  ```
+  pip install -r requirements.txt
+  ```
+
+### Building from Source
+
+#### Windows
 ```bash
 python build_exe.py
 ```
 
-3. Готовый exe-файл появится в папке `dist`
+#### macOS
+```bash
+python build_mac.py
+```
 
-## Использование
+## License
 
-1. Нажмите "Обзор" и выберите один или несколько файлов для конвертации
-2. При необходимости выберите папку для сохранения результатов
-3. Выберите формат конвертации из выпадающего списка
-4. Установите желаемую частоту кадров (для видео)
-5. Нажмите "Конвертировать"
-6. Дождитесь завершения процесса
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- [CustomTkinter](https://github.com/TomSchimansky/CustomTkinter) for the modern UI components
+- [MoviePy](https://zulko.github.io/moviepy/) for video processing
+- [Pillow](https://python-pillow.org/) for image processing
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## Автор
 
