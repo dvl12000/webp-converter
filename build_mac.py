@@ -22,9 +22,17 @@ a = Analysis(
         'PIL._tkinter_finder',
         'imageio',
         'imageio_ffmpeg',
+        'imageio_ffmpeg.binaries',
         'moviepy',
+        'moviepy.editor',
+        'moviepy.video.io.VideoFileClip',
+        'moviepy.video.VideoClip',
+        'moviepy.video.io.ffmpeg_writer',
         'numpy',
-        'cv2'
+        'cv2',
+        'tkinter',
+        'tkinter.filedialog',
+        'tkinter.messagebox'
     ],
     hookspath=[],
     hooksconfig={{}},
@@ -51,9 +59,9 @@ exe = EXE(
     console=False,
     disable_windowed_traceback=False,
     argv_emulation=True,
-    target_arch='universal2',
+    target_arch=None,  
     codesign_identity=None,
-    entitlements_file='entitlements.plist',
+    entitlements_file=None,
 )
 
 coll = COLLECT(
@@ -76,14 +84,14 @@ app = BUNDLE(
         'NSHighResolutionCapable': True,
         'LSMinimumSystemVersion': '10.15.0',
         'NSRequiresAquaSystemAppearance': False,
-        'CFBundleShortVersionString': '1.0.0',
-        'CFBundleVersion': '1.0.0',
+        'CFBundleShortVersionString': '1.0.1',
+        'CFBundleVersion': '1.0.1',
     }},
 )
 '''
 
 # Записываем .spec файл
-with open('WebP Converter.spec', 'w', encoding='utf-8') as f:
+with open('WebP Converter Mac.spec', 'w', encoding='utf-8') as f:
     f.write(spec_content)
 
 print("Для сборки на Mac выполните следующие команды:")
@@ -91,6 +99,6 @@ print("\n1. Создайте иконку:")
 print("python make_icns.py")
 print("iconutil -c icns icon.iconset")
 print("\n2. Соберите приложение:")
-print("python -m PyInstaller 'WebP Converter.spec'")
+print("python -m PyInstaller 'WebP Converter Mac.spec'")
 print("\n3. Подпишите приложение (опционально):")
 print("codesign --deep --force --sign 'Apple Development' 'dist/WebP Converter.app'")

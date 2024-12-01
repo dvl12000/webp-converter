@@ -28,13 +28,18 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install pyinstaller
-        pip uninstall -y opencv-python opencv-python-headless
+        pip uninstall -y opencv-python opencv-python-headless || true
         pip install opencv-python-headless==4.8.1.78
+        pip install moviepy==1.0.3
     
     - name: Create icon
       run: |
         python make_icns.py
         iconutil -c icns icon.iconset
+    
+    - name: Generate spec file
+      run: |
+        python build_mac.py
     
     - name: Build app
       run: |
