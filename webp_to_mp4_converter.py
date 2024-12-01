@@ -426,47 +426,159 @@ class FormatConverter(ctk.CTk):
                             frames = []
                             for frame in range(img.n_frames):
                                 img.seek(frame)
-                                frames.append(np.array(img.convert('RGB')))
-                            
-                            clip = ImageSequenceClip(frames, fps=fps)
-                            try:
-                                # Для Mac используем специальные кодеки
-                                if self.is_mac:
-                                    if format_name == "ProRes 422":
-                                        clip.write_videofile(output_path, codec='prores_ks', preset='normal', ffmpeg_params=['-profile:v', '2'])
-                                    elif format_name == "ProRes 4444":
-                                        clip.write_videofile(output_path, codec='prores_ks', preset='normal', ffmpeg_params=['-profile:v', '4'])
-                                    else:
-                                        clip.write_videofile(output_path, codec='libx264', preset='medium')
+                                frame_array = np.array(img.convert('RGB'))
+                                if frame_array is not None:
+                                    frames.append(frame_array)
                                 else:
-                                    if format_name == "ProRes 422":
-                                        clip.write_videofile(output_path, codec='prores', preset='normal')
-                                    elif format_name == "ProRes 4444":
-                                        clip.write_videofile(output_path, codec='prores_ks', preset='normal')
+                                    raise ValueError("Не удалось преобразовать кадр в массив")
+                            
+                            if not frames:
+                                raise ValueError("Не удалось извлечь кадры из анимации")
+                            
+                            # Проверяем, что все кадры корректны
+                            if not all(frame is not None and frame.shape[2] == 3 for frame in frames):
+                                raise ValueError("Некоторые кадры не удалось корректно преобразовать в RGB")
+                            
+                            # Создаем клип только если есть корректные кадры
+                            clip = None
+                            try:
+                                clip = ImageSequenceClip(frames, fps=fps)
+                                if clip is None:
+                                    raise ValueError("Не удалось создать видеоклип из кадров")
+                                    
+                                # Создаем временную директорию для промежуточных файлов
+                                with tempfile.TemporaryDirectory() as temp_dir:
+                                    temp_output = os.path.join(temp_dir, "temp_output" + format_ext)
+                                    
+                                    # Для Windows всегда используем libx264
+                                    if not self.is_mac:
+                                        clip.write_videofile(
+                                            temp_output,
+                                            codec='libx264',
+                                            preset='medium',
+                                            audio=False,
+                                            logger=None  # Отключаем логгер moviepy для избежания конфликтов
+                                        )
                                     else:
-                                        clip.write_videofile(output_path)
+                                        if format_name == "ProRes 422":
+                                            clip.write_videofile(
+                                                temp_output,
+                                                codec='prores_ks',
+                                                preset='normal',
+                                                ffmpeg_params=['-profile:v', '2'],
+                                                audio=False,
+                                                logger=None
+                                            )
+                                        elif format_name == "ProRes 4444":
+                                            clip.write_videofile(
+                                                temp_output,
+                                                codec='prores_ks',
+                                                preset='normal',
+                                                ffmpeg_params=['-profile:v', '4'],
+                                                audio=False,
+                                                logger=None
+                                            )
+                                        else:
+                                            clip.write_videofile(
+                                                temp_output,
+                                                codec='libx264',
+                                                preset='medium',
+                                                audio=False,
+                                                logger=None
+                                            )
+                                    
+                                    # Проверяем, что файл существует и имеет размер больше 0
+                                    if os.path.exists(temp_output) and os.path.getsize(temp_output) > 0:
+                                        import shutil
+                                        shutil.copy2(temp_output, output_path)
+                                        # Проверяем успешность копирования
+                                        if not os.path.exists(output_path):
+                                            raise ValueError("Не удалось скопировать файл в целевую директорию")
+                                    else:
+                                        raise ValueError("Ошибка при создании временного файла")
+                                        
                             finally:
-                                clip.close()
+                                # Закрываем клип и удаляем временные файлы
+                                if clip is not None:
+                                    try:
+                                        clip.close()
+                                    except:
+                                        pass
                         else:
                             # Статичное изображение
-                            clip = ImageClip(np.array(img)).set_duration(5)
+                            frame_array = np.array(img.convert('RGB'))
+                            if frame_array is None:
+                                raise ValueError("Не удалось преобразовать изображение в массив")
+                            
+                            # Проверяем корректность кадра
+                            if frame_array.shape[2] != 3:
+                                raise ValueError("Не удалось корректно преобразовать изображение в RGB")
+                            
+                            # Создаем клип только если кадр корректный
+                            clip = None
                             try:
-                                if self.is_mac:
-                                    if format_name == "ProRes 422":
-                                        clip.write_videofile(output_path, codec='prores_ks', preset='normal', ffmpeg_params=['-profile:v', '2'])
-                                    elif format_name == "ProRes 4444":
-                                        clip.write_videofile(output_path, codec='prores_ks', preset='normal', ffmpeg_params=['-profile:v', '4'])
+                                clip = ImageClip(frame_array).set_duration(5)
+                                if clip is None:
+                                    raise ValueError("Не удалось создать видеоклип из изображения")
+                                    
+                                # Создаем временную директорию для промежуточных файлов
+                                with tempfile.TemporaryDirectory() as temp_dir:
+                                    temp_output = os.path.join(temp_dir, "temp_output" + format_ext)
+                                    
+                                    # Для Windows всегда используем libx264
+                                    if not self.is_mac:
+                                        clip.write_videofile(
+                                            temp_output,
+                                            codec='libx264',
+                                            preset='medium',
+                                            audio=False,
+                                            logger=None  # Отключаем логгер moviepy для избежания конфликтов
+                                        )
                                     else:
-                                        clip.write_videofile(output_path, codec='libx264', preset='medium')
-                                else:
-                                    if format_name == "ProRes 422":
-                                        clip.write_videofile(output_path, codec='prores', preset='normal')
-                                    elif format_name == "ProRes 4444":
-                                        clip.write_videofile(output_path, codec='prores_ks', preset='normal')
+                                        if format_name == "ProRes 422":
+                                            clip.write_videofile(
+                                                temp_output,
+                                                codec='prores_ks',
+                                                preset='normal',
+                                                ffmpeg_params=['-profile:v', '2'],
+                                                audio=False,
+                                                logger=None
+                                            )
+                                        elif format_name == "ProRes 4444":
+                                            clip.write_videofile(
+                                                temp_output,
+                                                codec='prores_ks',
+                                                preset='normal',
+                                                ffmpeg_params=['-profile:v', '4'],
+                                                audio=False,
+                                                logger=None
+                                            )
+                                        else:
+                                            clip.write_videofile(
+                                                temp_output,
+                                                codec='libx264',
+                                                preset='medium',
+                                                audio=False,
+                                                logger=None
+                                            )
+                                    
+                                    # Проверяем, что файл существует и имеет размер больше 0
+                                    if os.path.exists(temp_output) and os.path.getsize(temp_output) > 0:
+                                        import shutil
+                                        shutil.copy2(temp_output, output_path)
+                                        # Проверяем успешность копирования
+                                        if not os.path.exists(output_path):
+                                            raise ValueError("Не удалось скопировать файл в целевую директорию")
                                     else:
-                                        clip.write_videofile(output_path)
+                                        raise ValueError("Ошибка при создании временного файла")
+                                        
                             finally:
-                                clip.close()
+                                # Закрываем клип и удаляем временные файлы
+                                if clip is not None:
+                                    try:
+                                        clip.close()
+                                    except:
+                                        pass
                 elif format_ext == '.gif':
                     # Конвертация в GIF
                     self.convert_to_gif(input_path, output_path, fps)
