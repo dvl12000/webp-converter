@@ -38,10 +38,11 @@ pip install -r requirements.txt
 python webp_to_mp4_converter.py
 ```
 
-### Вариант 2: Использование готового exe-файла
+### Вариант 2: Использование готового файла
 
-1. Скачайте последнюю версию WebP Converter.exe
-2. Запустите программу двойным кликом
+   WebP Converter
+   Для Windows - https://github.com/dvl12000/webp-converter/releases/download/v1.0.1/WebP.Converter.exe
+   Для MacOS - https://github.com/dvl12000/webp-converter/releases/download/v1.0.1/WebP-Converter-macOS.dmg
 
 ## Usage
 
