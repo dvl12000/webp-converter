@@ -24,6 +24,7 @@ wheels/
 build/
 dist/
 *.spec
+!WebP Converter Mac.spec
 
 # macOS
 .DS_Store
