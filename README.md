@@ -41,8 +41,8 @@ python webp_to_mp4_converter.py
 ### Вариант 2: Использование готового файла
 
    WebP Converter
-   Для Windows - https://github.com/dvl12000/webp-converter/releases/download/v1.0.1/WebP.Converter.exe
-   Для MacOS - https://github.com/dvl12000/webp-converter/releases/download/v1.0.1/WebP-Converter-macOS.dmg
+ - Для Windows - https://github.com/dvl12000/webp-converter/releases/download/v1.0.1/WebP.Converter.exe
+ - Для MacOS - https://github.com/dvl12000/webp-converter/releases/download/v1.0.1/WebP-Converter-macOS.dmg
 
 ## Usage
 
