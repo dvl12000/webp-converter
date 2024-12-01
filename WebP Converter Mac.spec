@@ -44,7 +44,7 @@ exe = EXE(
     console=False,
     disable_windowed_traceback=False,
     argv_emulation=True,
-    target_arch='universal2',
+    target_arch=None,  
     codesign_identity=None,
     entitlements_file='entitlements.plist',
 )
