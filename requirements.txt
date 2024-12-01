@@ -1,0 +1,7 @@
+customtkinter==5.2.1
+pillow==10.1.0
+moviepy==1.0.3
+numpy<2.0.0
+opencv-python-headless
+pyinstaller==6.3.0
+packaging
