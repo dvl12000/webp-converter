@@ -31,7 +31,7 @@ jobs:
     
     - name: Build app
       run: |
-        python -m PyInstaller "WebP Converter.spec"
+        python -m PyInstaller "WebP Converter Mac.spec"
     
     - name: Create DMG
       run: |
